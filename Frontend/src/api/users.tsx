@@ -7,7 +7,7 @@ export interface IUser {
   name: string;
   jobTitle: string;
   email: string;
-  projects: IProject[]
+  projects?: IProject[]
 }
 
 

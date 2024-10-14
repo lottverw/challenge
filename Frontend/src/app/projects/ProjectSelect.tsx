@@ -7,17 +7,21 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-import { getProjects } from "@/api/projects";
+import { getProjects, IProject } from "@/api/projects";
 import { useQuery } from "@tanstack/react-query";
+import Loader from "@/components/common/Loader";
  
 export function ProjectSelect({userId, handleSelect, defaultValue}: {userId: string | undefined, handleSelect: Function, defaultValue: string | undefined }) {
  
-  const { data, isLoading, isError } = useQuery({
+  console.log(['projects' + userId], )
+  const { data, isLoading } = useQuery({
     queryFn: async () => await getProjects(userId),
-    queryKey: "projects",
-    staleTime: 10000,
+    queryKey:["projects" + userId],
+    staleTime: 1000,
   });
 
+
+  if(isLoading) return <Loader isLoading={isLoading} />;
 
 
   return (
@@ -28,7 +32,7 @@ export function ProjectSelect({userId, handleSelect, defaultValue}: {userId: str
       <SelectContent>
         <SelectGroup>
           {
-            data?.map((project) => <SelectItem key={project.id} value={project.id}>{project.name}</SelectItem>)
+            data?.map((project : IProject )=> <SelectItem key={project.id} value={project.id}>{project.name}</SelectItem>)
           }
         </SelectGroup>
       </SelectContent>

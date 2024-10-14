@@ -1,4 +1,5 @@
 import { BASEURL } from "./helpers";
+import { IUser } from "./users";
 
 
 export interface IProject {
@@ -8,6 +9,7 @@ export interface IProject {
   description: string;
   deadline: string;
   budget: number;
+  users?: IUser[]
 }
 
 
@@ -32,7 +34,7 @@ async function getData(params: string | null) {
 }
 
 
-export async function getProjects(userId: string | null) {
+export async function getProjects(userId: string | undefined) {
   let queryString = "";
 
   if (userId) {

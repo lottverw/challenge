@@ -1,5 +1,7 @@
 import { IProject } from '@/api/projects';
+import { IUser } from '@/api/users';
 import { Card, CardHeader, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
+
 
 export default function ProjectCard({ project }: { project: IProject }) {
 
@@ -15,6 +17,17 @@ export default function ProjectCard({ project }: { project: IProject }) {
             <CardContent>
                 <p>Deadline: {project.deadline}</p>
                 <p>Budget: {project.budget}</p>
+                <hr className='my-2'/>
+                <p className='mt-2'>Project members</p>
+                <ul>
+                { 
+                    project.users?.map((user: IUser, index: number) => {
+                        return <li className='flex content-center' key={[project.id]+ "_" + user.id + '_' + index}>
+                         {user.name}
+                        </li>
+                    })
+                }
+                </ul>
             </CardContent>
         </Card>
     )

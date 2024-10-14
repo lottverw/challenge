@@ -21,12 +21,13 @@ export default function UserFormDialog({ user }: { user: IUser }) {
       // API call to add the project
       await assignUserToProject(user.id, selectedProjectId);
 
-      const cachedProjects = queryClient.getQueryData('projects');
+      const cachedProjects = queryClient.getQueryData(['projects' + user.id]);
 
-      const selectedProject = cachedProjects?.find(project => project.id === selectedProjectId);
+      console.log('cachedProjects', cachedProjects,['projects' + user.id])
+      const selectedProject = cachedProjects?.find((project: IProject) => project.id === selectedProjectId);
 
-      // Update the specific user in the 'users' cache
-      queryClient.setQueryData('users', (oldUsers: IUser[] | undefined) => {
+      console.log(selectedProject);
+      queryClient.setQueryData(['users'], (oldUsers: IUser[] | undefined) => {
         if (!oldUsers) return [];
 
         // Find the user and update their projects
@@ -55,17 +56,10 @@ export default function UserFormDialog({ user }: { user: IUser }) {
         <DialogHeader>
           <DialogTitle>Link project to {user.name}</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            test
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <ProjectSelect userId={user.id} handleSelect={handleProjectSelect} defaultValue={selectedProjectId} />
-          </div>
-        </div>
+        <ProjectSelect userId={user.id} handleSelect={handleProjectSelect} defaultValue={selectedProjectId} />
         <DialogFooter>
-          <DialogClose>
-            <Button type="submit" onClick={addProject}>Save changes</Button>
+          <DialogClose onClick={addProject}>
+          <span className="hover:bg-blue-50 border p-3 rounded text-dark text-sm">Save changes</span>
        </DialogClose>
         </DialogFooter>
       </DialogContent>

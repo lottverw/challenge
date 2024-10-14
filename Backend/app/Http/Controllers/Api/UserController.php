@@ -15,10 +15,6 @@ class UserController extends Controller
 {
     
    /**
-     * @OA\Get(
-     *     path="/api/users",
-     *     @OA\Response(response="200", description="An example endpoint")
-     * )
      * @return json 
      */
     public function index()
@@ -32,7 +28,19 @@ class UserController extends Controller
                 "name"=> $user['name'],
                 "jobTitle"=> $user['job_title'],
                 "email"=> $user['email'],
-                "projects"=> $user['projects']
+                "projects"=> 
+                
+                array_map(function ($project) {
+                    return [
+                        "id" => $project['uuid'],
+                        "color" => $project['color'],
+                        "name"=> $project['name'],
+                        "description" => $project['description'],
+                        "deadline" => (new \DateTime($project['deadline']))->format('d M. Y'),
+                        "budget" => $project['budget'],
+                    ];
+                }, $user['projects'])
+                
             ];
         }, $users->toArray());
 
@@ -40,10 +48,6 @@ class UserController extends Controller
     }
 
     /**
-     * @OA\Get(
-     *     path="/api/users/UUID",
-     *     @OA\Response(response="200", description="Got user by uuid")
-     * )
      * @param  string  $uuid
      * @return \Illuminate\Http\JsonResponse
      */

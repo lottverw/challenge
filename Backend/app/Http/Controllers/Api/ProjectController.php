@@ -11,10 +11,6 @@ class ProjectController extends Controller
 {
     
    /**
-     * @OA\Get(
-     *     path="/api/projects",
-     *     @OA\Response(response="200", description="An project endpoint")
-     * )
      * @return json 
      */
     public function index(Request $request)
@@ -26,9 +22,8 @@ class ProjectController extends Controller
             })->get();
         }
         else {
-            $projects = Project::all();
+            $projects = Project::with('users')->get();
         }
-
 
 
         $data = array_map(function ($project) {
@@ -38,7 +33,16 @@ class ProjectController extends Controller
                 "name"=> $project['name'],
                 "description" => $project['description'],
                 "deadline" => (new \DateTime($project['deadline']))->format('d M. Y'),
-                "budget" => $project['budget']
+                "budget" => $project['budget'],
+                "users" => isset($project['users'])? array_map(function ($user) {
+                    return [
+                        "id" => $user['uuid'],
+                        "image" => $user['image'],
+                        "name"=> $user['name'],
+                        "jobTitle"=> $user['job_title'],
+                        "email"=> $user['email'],
+                    ];
+                }, $project['users']) : []
             ];
         }, $projects->toArray());
 
@@ -47,10 +51,6 @@ class ProjectController extends Controller
     
     
     /**
-     * @OA\Post(
-     *     path="/api/projects/assign",
-     *     @OA\Response(response="201", description="Assign a user to a project")
-     * )
      * @return json 
      */
     public function assignUser(Request $request)
