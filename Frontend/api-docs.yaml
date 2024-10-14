@@ -1,0 +1,92 @@
+openapi: 3.0.0
+info:
+  title: Get users endpoint
+  version: 1.0.0
+servers:
+  - url: https://127.0.0.1:8000/api
+paths:
+  /api/users:
+    get:
+      summary: Get all users
+      operationId: 566aed8efb436ca506e0ef51a032ecd9
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+  /api/users/{uuid}:
+    get:
+      summary: Get one user by it's UUID
+      parameters:
+        - in: path
+          name: uuid
+          required: true
+          description: Numeric ID of the user to get.
+          schema:
+            $ref: '#/components/schemas/UUID'
+      operationId: 1494a6ac280430b7c87ec3bdc6c4bff2
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+        '404':
+          description: User not found
+components:
+  schemas:
+    UUID:
+      type: string
+      example: c544ef29-0e0e-43e0-a034-582c1ef17acd
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: c544ef29-0e0e-43e0-a034-582c1ef17acd
+        name:
+          type: string
+          example: Jane Doe
+        email:
+          type: string
+          example: jane.doe@example.com
+        jobFunction:
+          type: string
+          example: engeneer
+        image:
+          type: string
+          example: https://randomuser.me/api/portraits/men/15.jpg
+        projects:
+          $ref: '#/components/schemas/Project'
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          example: c544ef29-0e0e-43e0-a034-582c1ef17acd
+        name:
+          type: string
+          example: Lorem ipsum
+        budget:
+          type: number
+          example: 1256
+        color:
+          type: string
+          example: '#FFF'
+        description:
+          type: string
+          example: Lorem ipsum il dolor.
+        deadline:
+          type: string
+          example: 12/12/2024
