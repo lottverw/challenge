@@ -10,7 +10,7 @@ export default function Projects() {
 
   const { data: projects, isLoading } = useQuery({
     queryFn: async () => await getProjects(undefined),
-    queryKey: ["project "],
+    queryKey: ["project"],
   });
 
 
